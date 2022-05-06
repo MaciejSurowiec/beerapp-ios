@@ -34,7 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B80BD5F328259DA80068E714 /* beerapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = beerapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B80BD5F328259DA80068E714 /* 	.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "	.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B80BD5F628259DA80068E714 /* beerappApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = beerappApp.swift; sourceTree = "<group>"; };
 		B80BD5F828259DA80068E714 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B80BD5FA28259DA90068E714 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -84,7 +84,7 @@
 		B80BD5F428259DA80068E714 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B80BD5F328259DA80068E714 /* beerapp.app */,
+				B80BD5F328259DA80068E714 /* 	.app */,
 				B80BD60328259DA90068E714 /* beerappTests.xctest */,
 				B80BD60D28259DA90068E714 /* beerappUITests.xctest */,
 			);
@@ -130,9 +130,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B80BD5F228259DA80068E714 /* beerapp */ = {
+		B80BD5F228259DA80068E714 /* 	 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B80BD61728259DA90068E714 /* Build configuration list for PBXNativeTarget "beerapp" */;
+			buildConfigurationList = B80BD61728259DA90068E714 /* Build configuration list for PBXNativeTarget "	" */;
 			buildPhases = (
 				B80BD5EF28259DA80068E714 /* Sources */,
 				B80BD5F028259DA80068E714 /* Frameworks */,
@@ -142,9 +142,9 @@
 			);
 			dependencies = (
 			);
-			name = beerapp;
+			name = "	";
 			productName = beerapp;
-			productReference = B80BD5F328259DA80068E714 /* beerapp.app */;
+			productReference = B80BD5F328259DA80068E714 /* 	.app */;
 			productType = "com.apple.product-type.application";
 		};
 		B80BD60228259DA90068E714 /* beerappTests */ = {
@@ -219,7 +219,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B80BD5F228259DA80068E714 /* beerapp */,
+				B80BD5F228259DA80068E714 /* 	 */,
 				B80BD60228259DA90068E714 /* beerappTests */,
 				B80BD60C28259DA90068E714 /* beerappUITests */,
 			);
@@ -284,12 +284,12 @@
 /* Begin PBXTargetDependency section */
 		B80BD60528259DA90068E714 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B80BD5F228259DA80068E714 /* beerapp */;
+			target = B80BD5F228259DA80068E714 /* 	 */;
 			targetProxy = B80BD60428259DA90068E714 /* PBXContainerItemProxy */;
 		};
 		B80BD60F28259DA90068E714 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B80BD5F228259DA80068E714 /* beerapp */;
+			target = B80BD5F228259DA80068E714 /* 	 */;
 			targetProxy = B80BD60E28259DA90068E714 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -417,6 +417,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"beerapp/Preview Content\"";
+				DEVELOPMENT_TEAM = SM5D5XLM2G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -429,7 +430,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.beerapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.diplomaproject.beerapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -445,6 +446,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"beerapp/Preview Content\"";
+				DEVELOPMENT_TEAM = SM5D5XLM2G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -457,7 +459,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.beerapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.diplomaproject.beerapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -549,7 +551,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B80BD61728259DA90068E714 /* Build configuration list for PBXNativeTarget "beerapp" */ = {
+		B80BD61728259DA90068E714 /* Build configuration list for PBXNativeTarget "	" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B80BD61828259DA90068E714 /* Debug */,
