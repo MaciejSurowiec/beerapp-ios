@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B80BD5F228259DA80068E714"
-               BuildableName = "beerapp.app"
-               BlueprintName = "&#9;"
+               BuildableName = "BeerUp.app"
+               BlueprintName = "BeerUp"
                ReferencedContainer = "container:beerapp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -65,11 +65,18 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B80BD5F228259DA80068E714"
-            BuildableName = "beerapp.app"
-            BlueprintName = "&#9;"
+            BuildableName = "BeerUp.app"
+            BlueprintName = "BeerUp"
             ReferencedContainer = "container:beerapp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "OS_ACTIVITY_MODE"
+            value = "disable"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -82,8 +89,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B80BD5F228259DA80068E714"
-            BuildableName = "beerapp.app"
-            BlueprintName = "&#9;"
+            BuildableName = "BeerUp.app"
+            BlueprintName = "BeerUp"
             ReferencedContainer = "container:beerapp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
