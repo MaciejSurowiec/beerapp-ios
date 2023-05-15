@@ -32,10 +32,14 @@ You can still use mlpackage for beer bottle/can detection.
 ## Results 
 
 interface examples:
+
 <img src="https://raw.github.com/MaciejSurowiec/beerapp-ios/main/examples/interface1.JPG" width=236 height=510>
 <img src="https://raw.github.com/MaciejSurowiec/beerapp-ios/main/examples/interface2.JPG" width=236 height=510>
 
+
+
 recognition example:
+
 <img src="https://raw.github.com/MaciejSurowiec/beerapp-ios/main/examples/recognition1.PNG" width=236 height=510>
 <img src="https://raw.github.com/MaciejSurowiec/beerapp-ios/main/examples/recognition2.PNG" width=236 height=510>
 
