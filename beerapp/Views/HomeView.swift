@@ -71,5 +71,6 @@ struct HomeView_Previews: PreviewProvider {
     static var stats = ModelData.Stats()
     static var previews: some View {
        HomeView().environmentObject(ModelData())
+            .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
     }
 }

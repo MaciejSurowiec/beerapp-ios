@@ -63,6 +63,6 @@ struct BeerListView: View {
 
 struct BeerListView_Previews: PreviewProvider {
     static var previews: some View {
-        BeerListView().environmentObject(ModelData())
+        BeerListView().environmentObject(ModelData())            .environmentObject(ModelData()).previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
     }
 }

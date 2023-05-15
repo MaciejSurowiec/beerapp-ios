@@ -36,6 +36,8 @@ struct RegisterView: View {
     @State private var weakPassE = false
     
     @State private var takenLoginE = false
+    @State private var internalE = false
+    @State private var internalJsonE = false
     @FocusState private var focusField: Field?
     
     var body: some View {
@@ -49,10 +51,24 @@ struct RegisterView: View {
                 }
             
                 VStack {
-                    if takenLoginE {
-                        Text("Podany login jest już zajęty")
-                            .fontWeight(.light)
-                            .foregroundColor(Color.red)
+                    Group{
+                        if takenLoginE {
+                            Text("Podany login jest już zajęty")
+                                .fontWeight(.light)
+                                .foregroundColor(Color.red)
+                        }
+                        
+                        if internalE {
+                            Text("Blad wewnętrzny sprobój ponownie później")
+                                .fontWeight(.light)
+                                .foregroundColor(Color.red)
+                        }
+                        
+                        if internalJsonE {
+                            Text("Blad wewnętrzny związany z jsonem sprobój ponownie później")
+                                .fontWeight(.light)
+                                .foregroundColor(Color.red)
+                        }
                     }
                     
                     HStack {
@@ -67,7 +83,7 @@ struct RegisterView: View {
                     .focused($focusField, equals: .loginField)
                     .padding()
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(focusField == .loginField ? Color.chocolate : .white.opacity(0),lineWidth: 1 ))
-
+                        
                     if emptyLoginE {
                         Text("brak danych")
                             .fontWeight(.light)
@@ -178,6 +194,8 @@ struct RegisterView: View {
         if !emptyLoginE && !emptyEmailE && !emptyPassE && !emptyPass2E && !invalidEmailE && !weakPassE {
             if !unmatchedPassE {
                 takenLoginE = false
+                internalE = false
+                internalJsonE = false
                 do {
                     let salt = try BCrypt.Salt()
                     let hashed = try BCrypt.Hash(pass,salt:salt)
@@ -190,13 +208,19 @@ struct RegisterView: View {
     }
     
     func RegisterResult(_ code: Int) {
-        if code == 204 {
-            modelData.OnLogin(login)
-        } else {
-            takenLoginE = true
+        switch code {
+            case 204:
+                    modelData.OnLogin(login)
+            case 400:
+                usedLoginE = true
+            case 409:
+                internalJsonE = true
+            case 500:
+                internalE = true
+            default:
+                internalE = true
         }
     }
-
 }
 
 struct RegisterView_Previews: PreviewProvider {

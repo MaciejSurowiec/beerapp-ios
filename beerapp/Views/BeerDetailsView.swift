@@ -27,7 +27,6 @@ struct BeerDetailsView: View {
     @State private var isCustomCameraViewPresented = false
     @State private var isPhotoSending = false
     @State private var reviewDisable = true
-    @State private var tags: [String]
     @State private var isReviewSended = false
     @State private var isTagsSended = false
     @State private var isTagsButtonDisabled = true
@@ -37,7 +36,6 @@ struct BeerDetailsView: View {
     
     init(beer: ModelData.BeerS) {
         self.beer = beer
-        tags = beer.tags
     }
     
     var body: some View {
@@ -86,6 +84,7 @@ struct BeerDetailsView: View {
                 
                     Button("Wyślij ocenę"){
                         modelData.SendReview(review: review , beer: beer, callback: ReviewSended)
+                        reviewDisable = true
                     }
                     .buttonStyle(.borderedProminent)
                     .dynamicTypeSize(/*@START_MENU_TOKEN@*/.xxxLarge/*@END_MENU_TOKEN@*/)
@@ -99,7 +98,7 @@ struct BeerDetailsView: View {
                         if(modelData.tagsDownloaded){
                             WidthReader { width in
                                 HFlow(modelData.tags, maxWidth: width){ tag in
-                                    TagView(active: beer.tags.contains(tag), tag: tag, callback: ChangeTag)
+                                    TagView(active: beer.newTags.contains(tag), tag: tag, callback: ChangeTag)
                                 }
                             }.padding()
                         } else {
@@ -112,7 +111,7 @@ struct BeerDetailsView: View {
                             .foregroundColor(.green)
                     }
                     Button("Wyślij tagi"){
-                        modelData.SendTags(tags: beer.tags, beer: beer, callback: TagsSended)
+                        modelData.SendTags(beer: beer, callback: TagsSended)
                     }
                     .buttonStyle(.borderedProminent)
                     .dynamicTypeSize(/*@START_MENU_TOKEN@*/.xxxLarge/*@END_MENU_TOKEN@*/)
@@ -172,12 +171,12 @@ struct BeerDetailsView: View {
     func ChangeTag(_ tag: String, _ add: Bool) {
         isTagsSended = false
         if add {
-            tags.append(tag)
+            beer.newTags.append(tag)
         } else {
-            tags.remove(at: tags.firstIndex(of: tag) ?? 0)
+            beer.newTags.remove(at: beer.newTags.firstIndex(of: tag) ?? 0)
         }
         
-        if Set(tags) == Set(beer.tags) {
+        if Set(beer.newTags) == Set(beer.tags) {
             isTagsButtonDisabled = true
         } else {
             isTagsButtonDisabled = false
@@ -185,11 +184,14 @@ struct BeerDetailsView: View {
     }
     
     func ReviewSended() {
+        reviewDisable = false
         isReviewSended = true
     }
     
-    func TagsSended() {
+    func TagsSended(_ updatedBeer: ModelData.BeerS) {
         isTagsSended = true
+        isTagsButtonDisabled = true
+        beer = updatedBeer
     }
 
     func PhotoSended() {
@@ -206,7 +208,9 @@ struct BeerDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             BeerDetailsView(beer: testBeer).environmentObject(ModelData())
-            BeerDetailsView(beer: testBeer).previewDevice("iPad (9th generation)").environmentObject(ModelData())
+                .environmentObject(ModelData()).previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
+            BeerDetailsView(beer: testBeer).previewDevice("iPad (9th generation)")
+                .environmentObject(ModelData())
         }
     }
 }

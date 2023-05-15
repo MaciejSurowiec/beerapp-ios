@@ -54,27 +54,29 @@ class CameraSevice {
     }
     
     private func setupCamera(completion: @escaping (Error?) -> ()){
-        let session = AVCaptureSession()
-        session.sessionPreset = AVCaptureSession.Preset.photo
-        if let device = AVCaptureDevice.default(for: .video){
-            do{
-                let input = try AVCaptureDeviceInput(device: device)
-                if session.canAddInput(input) {
-                    session.addInput(input)
+        DispatchQueue.main.async {
+            let session = AVCaptureSession()
+            session.sessionPreset = AVCaptureSession.Preset.photo
+                if let device = AVCaptureDevice.default(for: .video){
+                    do{
+                        let input = try AVCaptureDeviceInput(device: device)
+                        if session.canAddInput(input) {
+                            session.addInput(input)
+                        }
+                        
+                        if session.canAddOutput(self.output) {
+                            session.addOutput(self.output)
+                        }
+                        
+                        self.previewLayer.videoGravity = .resizeAspectFill
+                        self.previewLayer.session = session
+                        
+                        session.startRunning()
+                        self.session = session
+                    } catch {
+                        completion(error)
+                    }
                 }
-                
-                if session.canAddOutput(output) {
-                    session.addOutput(output)
-                }
-                
-                previewLayer.videoGravity = .resizeAspectFill
-                previewLayer.session = session
-                
-                session.startRunning()
-                self.session = session
-            } catch {
-                completion(error)
-            }
         }
     }
     

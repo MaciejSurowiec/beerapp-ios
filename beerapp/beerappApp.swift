@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import NumPySupport
+import PythonSupport
+import PythonKit
 
-// stowrzyc mother view
-// w mother view dac switcha i zmieniac na odpowiednie view
 @main
 struct beerappApp: App {
     @StateObject private var modelData = ModelData()

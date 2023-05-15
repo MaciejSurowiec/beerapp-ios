@@ -1,0 +1,13 @@
+{
+  "MLModelVersionStringKey" : "--",
+  "MLModelDescriptionKey" : "--",
+  "MLModelCreatorDefinedKey" : {
+    "com.apple.createml.app.tag" : "99.2",
+    "com.apple.createml.version" : "12.6.0",
+    "com.apple.createml.app.version" : "4.0",
+    "iterations" : "3500",
+    "com.apple.coreml.model.preview.type" : "objectDetector"
+  },
+  "MLModelAuthorKey" : "Maciej  Surowiec",
+  "MLModelLicenseKey" : "--"
+}

@@ -1,0 +1,24 @@
+{
+    "fileFormatVersion": "1.0.0",
+    "itemInfoEntries": {
+        "7FEBB45C-CEE3-493F-85F2-F1572EE62835": {
+            "author": "com.apple.CoreML",
+            "description": "External Metadata Overlay",
+            "name": "Metadata.json",
+            "path": "com.apple.CoreML/Metadata.json"
+        },
+        "84C25425-228E-4C1C-85BE-C45CDE18BCE8": {
+            "author": "com.apple.CoreML",
+            "description": "External FeatureDescription Overlay",
+            "name": "FeatureDescriptions.json",
+            "path": "com.apple.CoreML/FeatureDescriptions.json"
+        },
+        "936DB119-931B-4184-AFE4-B76D73AC34BA": {
+            "author": "com.apple.CoreML",
+            "description": "CoreML Model Specification",
+            "name": "BeerRecognizer.mlmodel",
+            "path": "com.apple.CoreML/BeerRecognizer.mlmodel"
+        }
+    },
+    "rootModelIdentifier": "936DB119-931B-4184-AFE4-B76D73AC34BA"
+}

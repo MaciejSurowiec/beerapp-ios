@@ -12,25 +12,36 @@ import AVFoundation
 struct AccountView: View {
     
     @EnvironmentObject var modelData: ModelData
-    
+    @State var showingAlert = false
     var body: some View {
         NavigationView {
             VStack {
                 List {
-                    NavigationLink{
-                        Text("Jeszcze nic tu nie ma")
+                    NavigationLink {
+                        Button("Usuń konto", role: .destructive) {
+                            showingAlert = true
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .dynamicTypeSize(.xxxLarge)
+                        .padding(.bottom, 20)
+                        .alert("Czy chcesz usunąć konto", isPresented: $showingAlert) {
+                            Button("Tak, usuń konto", role: .destructive) {
+                                modelData.DeleteAccount()
+                            }
+                        }
+                        
                     } label: {
-                        HStack{
+                        HStack {
                             Image(systemName: "person.fill")
                                 .font(.title3)
                             Text("Profil")
                         }.padding()
                     }
                         
-                    NavigationLink{
+                    NavigationLink {
                         AboutView()
                     } label: {
-                        HStack{
+                        HStack {
                             Image(systemName: "person.3.fill")
                                 .font(.title3)
                             
@@ -49,20 +60,20 @@ struct AccountView: View {
                         }.padding()
                     })
                     
-                    HStack{
+                    HStack {
                         Image(systemName: "globe")
                             .font(.title3)
                         Link("Odwiedź naszą stronę", destination: URL(string: "https://diplomabeerapp.github.io/")!)
                     }.padding()
                 }.listStyle(.plain)
                 
-                
-               Button("Wyloguj") {
+                Button("Wyloguj") {
                    modelData.Logout()
-               }
-               .buttonStyle(.borderedProminent)
-               .dynamicTypeSize(.xxxLarge)
-               .padding(.bottom, 20)
+                }
+                .buttonStyle(.borderedProminent)
+                .dynamicTypeSize(.xxxLarge)
+                .padding(.bottom, 20)
+
             }.padding()
         }
     }
@@ -71,5 +82,7 @@ struct AccountView: View {
 struct AccountView_Previews: PreviewProvider {
     static var previews: some View {
         AccountView()
+            .environmentObject(ModelData())
+            .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro Max"))
     }
 }

@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 import UIKit
 import Network
+import SwiftAnnoy
+import Accelerate
 
 
 extension String {
@@ -20,7 +22,6 @@ extension String {
 
 
 extension Data {
-
     var mimeType: String? {
         var values = [UInt8](repeating: 0, count: 1)
         copyBytes(to: &values, count: 1)
@@ -72,6 +73,10 @@ final class ModelData: ObservableObject {
         let content: [Beer]
     }
     
+    struct SingleBeerContent: Decodable {
+        let content: Beer
+    }
+    
     struct TagsContent: Decodable {
         let content: [String]
     }
@@ -93,6 +98,7 @@ final class ModelData: ObservableObject {
         var style: String
         var review: Int
         var tags: [String]
+        var newTags: [String]
         var mainPhotoUrl: String
         init(){
             beerId = ""
@@ -103,6 +109,7 @@ final class ModelData: ObservableObject {
             style = "styl"
             review = 0
             tags = []
+            newTags = []
             mainPhotoUrl = ""
         }
         
@@ -115,6 +122,7 @@ final class ModelData: ObservableObject {
             style = beer.style
             review = beer.review ?? 0
             tags = beer.tags
+            newTags = beer.tags
             mainPhotoUrl = beer.mainPhotoUrl
         }
         
@@ -129,6 +137,7 @@ final class ModelData: ObservableObject {
             mainPhotoUrl = beer.mainPhotoUrl
             beer.tags.forEach{ tag in
                 tags.append(tag)
+                newTags.append(tag)
             }
         }
     }
@@ -190,6 +199,7 @@ final class ModelData: ObservableObject {
     let number: Int = 0
     
     
+    let annoy = AnnoyIndex<Float>(itemLength: 128, metric: .euclidean)
     let networkMonitor = NWPathMonitor()
     
     let boundary = "example.boundary.\(ProcessInfo.processInfo.globallyUniqueString)"
@@ -201,6 +211,15 @@ final class ModelData: ObservableObject {
     }
     
     init() {
+        print(OpenCVWrapper.openCVVersionString())
+        do{
+            if let url = Bundle.main.url(forResource: "model", withExtension: "ann") {
+                try annoy.load(url: url)
+            }
+
+        } catch {
+            print("dupa")
+        }
         networkMonitor.pathUpdateHandler = { path in
             if path.status == .satisfied {
                 if self.noInternet {
@@ -259,6 +278,7 @@ final class ModelData: ObservableObject {
             
             self.isRegistrationGoing = false
             let response = response as! HTTPURLResponse
+            
             callback(response.statusCode)
             
         }.resume()
@@ -563,7 +583,7 @@ final class ModelData: ObservableObject {
         stats.lastThreeReviews.insert(updatedBeer, at: 0)
     }
     
-    func SendTags(tags: [String], beer: BeerS, callback: @escaping ()->()) { //calback zeby wyswietlic ze wyslalo tagi
+    func SendTags(beer: BeerS, callback: @escaping (BeerS)->()) { //calback zeby wyswietlic ze wyslalo tagi
         let url = URL(string: "https://k4qauqp2v9.execute-api.us-east-1.amazonaws.com/prod/reviews/" + userLogin.urlEncoded! + "/" + beer.beerId + "/tags")
         guard let requestUrl = url else {fatalError()}
         
@@ -572,7 +592,7 @@ final class ModelData: ObservableObject {
         request.httpMethod = "PUT"
         request.addValue("aplication/json", forHTTPHeaderField: "Content-Type")
         do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: tags)
+            request.httpBody = try JSONSerialization.data(withJSONObject: beer.newTags)
         } catch let error{
             print(error.localizedDescription)
         }
@@ -585,8 +605,8 @@ final class ModelData: ObservableObject {
                 return
             }
             
-            beer.tags = tags
-            callback()
+            beer.tags = beer.newTags
+            callback(beer)
         }.resume()
     }
     
@@ -707,5 +727,171 @@ final class ModelData: ObservableObject {
         data.append(endData)
         return data
     }
+    
+    func DeleteAccount() {
+        let url = URL(string: "https://k4qauqp2v9.execute-api.us-east-1.amazonaws.com/prod/users/" + userLogin)
+        guard let requestUrl = url else {fatalError()}
+        
+        var request = URLRequest(url: requestUrl)
+        
+        request.httpMethod = "DELETE"
+        request.addValue("aplication/json", forHTTPHeaderField: "Content-Type")
+       
+        URLSession.shared.dataTask(with: request){
+         (data, response,error) in
+            print(response as Any)
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            self.Logout()
+                
+        }.resume()
+    }
+    
+    struct Images: Identifiable {
+        let id = UUID()
+        let image: UIImage
+    }
+    
+    
+    func StartSendingImages(images: [Images], callback: @escaping ()->()) {
+        var acc = 0
+        images.forEach { image in
+            let url = URL(string: "https://k4qauqp2v9.execute-api.us-east-1.amazonaws.com/prod/images")
+            guard let requestUrl = url else {fatalError()}
+            
+            var request = URLRequest(url: requestUrl)
+            
+            request.httpMethod = "GET"
+            request.addValue("aplication/json", forHTTPHeaderField: "Content-Type")
+            
+            URLSession.shared.dataTask(with: request){
+                (data, response,error) in
+                print(response as Any)
+                if let error = error {
+                    print(error)
+                    return
+                }
+                
+                guard let data=data else{
+                    return
+                }
+                
+                do{
+                    let content = try JSONDecoder().decode(StringContent.self, from: data)
+                    acc += 1
+                    self.SendImages(url: content.content, image: image.image, count: images.count, actual: acc, callback: callback)
+                    
+                    
+                } catch let error{
+                    print(error.localizedDescription)
+                }
+            }.resume()
+        }
+    }
+    
+    func SendImages(url: String, image: UIImage, count: Int, actual: Int, callback: @escaping ()->()) {
+        let url = URL(string: url)
+        guard let requestUrl = url else {fatalError()}
+        
+        var request = URLRequest(url: requestUrl)
+        var data = Data()
+        
+        let imageData = image.jpegData(compressionQuality: 1)!
+        
+        data.append(imageData)
+        request.httpBody = imageData
+        request.httpMethod = "PUT"
+        request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.addValue("Accept", forHTTPHeaderField: "application/json")
+        
+        URLSession.shared.dataTask(with: request){
+            (data, response,error) in
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            guard let data = data else{
+                return
+            }
+            
+            if count <= actual {
+                callback()
+            }
+            
+        }.resume()
+    }
+    
+
+    
+    func GetBeerID(data: NSMutableArray) -> Int{
+        
+        let start = CACurrentMediaTime()
+        
+        var out: [Float] = []
+        
+        data.forEach { d in
+            if let f = d as? Float {
+                out.append(f)
+            } else {
+                out.append(0)
+            }
+        }
+        
+        let neighbor = annoy.getNNsForVector(vector: &out, neighbors: 1)
+       
+        let end = CACurrentMediaTime()
+        //print(end-start)
+        print(neighbor?.distances[0])
+        
+        return neighbor?.indices[0] ?? 0
+    }
+    
+    
+    func GetColumn(_ data: [[Double]], _ index: Int,_ rows: Int) -> [Double] {
+        var output: [Double] = []
+        for i in 0...rows-1 {
+            output.append(data[i][index])
+        }
+        
+        return output
+    }
+    
+    func GetBeerByID(id: Int, callback: @escaping (BeerS) -> Void) {
+        
+        let url = URL(string: "https://k4qauqp2v9.execute-api.us-east-1.amazonaws.com/prod/beers/" + String(id))
+        
+        
+        guard let requestUrl = url else{ fatalError() }
+        
+        var request = URLRequest(url: requestUrl)
+        request.httpMethod = "GET"
+        request.addValue("aplication/json", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) {
+         (data, response, error) in
+            if let error = error {
+                print(error)
+                return
+            }
+            guard let data = data else{
+                return
+            }
+            do{
+                let content = try JSONDecoder().decode(SingleBeerContent.self, from: data)
+                
+                let beerS = BeerS(beer: content.content)
+                callback(beerS)
+               
+            } catch let error{
+                print(error.localizedDescription)
+            }
+        }.resume()
+        
+    }
+    
     
 }

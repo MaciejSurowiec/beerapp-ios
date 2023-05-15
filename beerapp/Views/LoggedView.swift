@@ -17,6 +17,7 @@ struct LoggedView: View {
         case homePage
         case about
         case beerList
+        case detection
     }
     
     var body: some View {
@@ -27,6 +28,12 @@ struct LoggedView: View {
                         Label("Strona Główna", systemImage: "house")
                     }
                     .tag(Tab.homePage)
+                
+                DetectionView()
+                    .tabItem {
+                        Label("Wykryj", systemImage: "camera.fill")
+                    }
+                    .tag(Tab.detection)
                 
                 BeerListView()
                     .tabItem {
