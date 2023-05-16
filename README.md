@@ -35,7 +35,7 @@ interface examples:
 
 <img src="https://raw.github.com/MaciejSurowiec/beerapp-ios/main/examples/interface1.JPG" width=236 height=510>
 <img src="https://raw.github.com/MaciejSurowiec/beerapp-ios/main/examples/interface2.JPG" width=236 height=510>
-
+<img src="https://raw.github.com/MaciejSurowiec/beerapp-ios/main/examples/interface3.JPG" width=236 height=510>
 
 
 recognition example:
